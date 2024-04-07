@@ -6,7 +6,7 @@
 
 char codice[L];
 char tentativo[L];
-int i, j, k;
+int i, j, k, t;
 int pos, num, doppi, doppi_c;
 
 //genera codice casuale
@@ -27,17 +27,41 @@ void try()
     scanf("%s", tentativo);
 }
 
-//calcola pos
+//calcola posizioni
 void posizioni()
 {
+    pos = 0;
+
     for(i=0;i<L;i++)
     {
-        for(j=1;j<L;j++)
+        if(tentativo[i] == codice[i])
         {
-            if(tentativo[i] == codice[j] && i == j)
+            tentativo[i] = 'P';
+            pos++;
+        }
+    }
+}
+
+//calcola numeri
+void numeri()
+{
+    num = 0;
+
+    for(i=0;i<L;i++)
+    {
+        doppi_c = 0;
+        for(j=0;j<L;j++)
+        {
+            if(tentativo[i] == codice[j])
             {
-                tentativo[i] = 'P';
-                pos++;
+                for(k=0;k<j;k++)
+                {
+                    if(codice[j] == codice[k])
+                        doppi_c = 1;
+                }
+
+                if(!doppi_c)
+                    num++;
             }
         }
     }
@@ -57,28 +81,8 @@ void zero()
 
     printf("tentativo senza doppi: %s\n", tentativo);
 
-    //conta num
-    for(i=0;i<L;i++)
-    {
-        doppi_c = 0;
-        for(j=0;j<L;j++)
-        {
-            if(tentativo[i] == codice[j])
-            {
-                for(k=0;k<j;k++)
-                {
-                    if(codice[j] == codice[k])
-                        doppi_c = 1;
-                }
-
-                if(!doppi_c)
-                {
-                    num++;
-                    printf("num aumenta\n");
-                }
-            }
-        }
-    }
+    //calcola num
+    numeri();
 
     if(!num)
         printf("Nessuno dei numeri inseriti è presente nel codice\n");
@@ -90,7 +94,17 @@ void zero()
 
 void one()
 {
-    printf("%s\n", tentativo);
+    //calcola num
+    numeri();
+
+    num++;
+
+    if(num == 1)
+        printf("%d dei numeri inseriti è presente nel codice\n", num);
+    else
+        printf("%d dei numeri inseriti sono presenti nel codice\n", num);
+
+    printf("di cui %d nella posizione corretta\n", pos);
 }
 
 int main()
@@ -100,19 +114,29 @@ int main()
     printf("%s\n", codice);
 
     //inserimento tentativo
-    try();
+    while(pos != 4)
+    {    
+        try();
+        t++;
+        printf("%s\n", codice);
+        printf("%s\n", codice);
+        printf("%s\n", tentativo);
+        printf("%s\n", tentativo);
 
-    //calcola posizioni
-    posizioni();
+        //calcola pos
+        posizioni();
 
-    switch(pos)
-    {
-        case 0:
-        zero();
-        break;
-        one();
-        default:
-        printf("pos != 0 && pos != 1\n");
+        switch(pos)
+        {
+            case 0:
+            zero();
+            break;
+            case 1:
+            one();
+            break;
+            default:
+            printf("pos != 0 && pos != 1\n");
+        }
     }
 
     return 0;
