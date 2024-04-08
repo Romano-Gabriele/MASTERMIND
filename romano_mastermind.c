@@ -157,7 +157,7 @@ int main()
     }
 
     //stampa risultato
-    printf("\nHai esaurito i tentativi\nGioca ancora!!");
+    printf("\nHai esaurito i tentativi\nGioca ancora!!\n");
 
     return 0;
 }
