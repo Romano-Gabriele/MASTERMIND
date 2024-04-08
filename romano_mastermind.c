@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -6,7 +7,7 @@
 
 char codice[L];
 char tentativo[L];
-int i, j, k, t;
+int i, j, k, c, t=1;
 int pos, num, doppi, doppi_c;
 
 //genera codice casuale
@@ -23,8 +24,10 @@ void genera()
 //inserimento tentativo
 void try()
 {
+    printf("\nTentativo %d\n", t);
     printf("Inserire tentativo: ");
     scanf("%s", tentativo);
+    t++;
 }
 
 //calcola posizioni
@@ -67,6 +70,7 @@ void numeri()
     }
 }
 
+//pos = 0
 void zero()
 {
     //controllo doppi
@@ -79,11 +83,10 @@ void zero()
         }
     }
 
-    printf("tentativo senza doppi: %s\n", tentativo);
-
     //calcola num
     numeri();
 
+    //stampa risultato
     if(!num)
         printf("Nessuno dei numeri inseriti è presente nel codice\n");
     else if(num == 1)
@@ -92,13 +95,15 @@ void zero()
         printf("%d dei numeri inseriti sono presenti nel codice\n", num);
 }
 
+//pos = 1 || pos = 2 || pos = 3
 void one()
 {
     //calcola num
     numeri();
 
-    num++;
+    num += pos;
 
+    //stampa risultato
     if(num == 1)
         printf("%d dei numeri inseriti è presente nel codice\n", num);
     else
@@ -107,21 +112,25 @@ void one()
     printf("di cui %d nella posizione corretta\n", pos);
 }
 
+//pos = 4
+void four()
+{
+    //stampa risultato
+    printf("Complimenti, hai indovinato il codice segreto!!\nLa combinazione era: ");
+    for(i=0;i<L;i++)
+        printf("%c", codice[i]);
+    printf("\n");
+}
+
 int main()
 {
     //genera codice da indovinare
     genera();
-    printf("%s\n", codice);
 
-    //inserimento tentativo
-    while(pos != 4)
-    {    
+    while(t <= 10)
+    {
+        //inserimento
         try();
-        t++;
-        printf("%s\n", codice);
-        printf("%s\n", codice);
-        printf("%s\n", tentativo);
-        printf("%s\n", tentativo);
 
         //calcola pos
         posizioni();
@@ -134,10 +143,21 @@ int main()
             case 1:
             one();
             break;
-            default:
-            printf("pos != 0 && pos != 1\n");
+            case 2:
+            one();
+            break;
+            case 3:
+            one();
+            break;
+            case 4:
+            four();
+            return 0;
+            break;
         }
     }
+
+    //stampa risultato
+    printf("\nHai esaurito i tentativi\nGioca ancora!!");
 
     return 0;
 }
